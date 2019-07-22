@@ -1,12 +1,12 @@
 {
-  "name": "changelog-maker",
+  "name": "@agilgur5/changelog-maker",
   "version": "2.3.0",
-  "description": "A git log to CHANGELOG.md tool",
+  "description": "A git log to release changelog tool",
   "main": "changelog-maker.js",
   "bin": {
     "changelog-maker": "./changelog-maker.js"
   },
-  "author": "Rod <rod@vagg.org> (http://r.va.gg/)",
+  "author": "Anton Gilgur",
   "license": "MIT",
   "dependencies": {
     "async": "~2.6.1",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nodejs/changelog-maker.git"
+    "url": "https://github.com/agilgur5/changelog-maker.git"
   },
   "preferGlobal": true,
   "scripts": {
