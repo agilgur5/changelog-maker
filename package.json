@@ -9,9 +9,13 @@
   "preferGlobal": true,
   "author": "Anton Gilgur",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/agilgur5/changelog-maker",
   "repository": {
     "type": "git",
     "url": "https://github.com/agilgur5/changelog-maker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agilgur5/changelog-maker/issues"
   },
   "scripts": {
     "lint": "standard",
