@@ -1,13 +1,28 @@
-# changelog-maker
+# @agilgur5/changelog-maker
 
-**A git log to CHANGELOG.md tool**
+**A git log to release changelog tool**
 
-[![npm](https://nodei.co/npm/changelog-maker.png?downloads=true&downloadRank=true)](https://nodei.co/npm/changelog-maker/)
-[![npm](https://nodei.co/npm-dl/changelog-maker.png?months=6&height=3)](https://nodei.co/npm/changelog-maker/)
+[![npm](https://nodei.co/npm/@agilgur5/changelog-maker.png?downloads=true&downloadRank=true)](https://nodei.co/npm/@agilgur5/changelog-maker/)
+[![npm](https://nodei.co/npm-dl/@agilgur5/changelog-maker.png?months=6&height=3)](https://nodei.co/npm/@agilgur5/changelog-maker/)
 
 ## Eh?
 
-**changelog-maker** is a formalisation of the [Node.js](https://github.com/nodejs/node) CHANGELOG.md entry process but flexible enough to be used on other repositories.
+**@agilgur5/changelog-maker** is a slightly modified version of [Node's `changelog-maker`](https://github.com/nodejs/changelog-maker).
+Along with the changelog described below, this version will add some Markdown around it as well, looking like:
+
+````markdown
+## Release
+
+```
+...latest tag's commit message goes here...
+```
+
+## Changelog
+
+...changelog goes here...
+
+[v1.0.1...v1.0.2](https://github.com/agilgur5/repo/compare/v1.0.1...v1.0.2)
+````
 
 **changelog-maker** will look at the git log of the current directory, pulling entries since the last tag. Commits with just a version number in the summary are removed, as are commits prior to, and including summaries that say `working on <version>` (this is an io.js / Node ism).
 
@@ -39,7 +54,7 @@ When printing to a console some special behaviours are invoked:
 ## Install
 
 ```
-$ npm i changelog-maker -g
+$ npm i @agilgur5/changelog-maker -g
 ```
 
 ## Usage
@@ -60,7 +75,3 @@ $ npm i changelog-maker -g
 
 Please note that the defaults for `--start-ref` and `--end-ref` have changed slightly between `@agilgur5/changelog-maker` and the original `changelog-maker`.
 `changelog-maker` used "last tag" and "now" whereas `@agilgur5/changelog-maker` uses "second-to-last tag" and "last tag".
-
-## License
-
-**changelog-maker** is Copyright (c) 2015 Rod Vagg [@rvagg](https://twitter.com/rvagg) and licenced under the MIT licence. All rights not explicitly granted in the MIT license are reserved. See the included LICENSE.md file for more details.
