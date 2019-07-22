@@ -2,6 +2,14 @@
   "name": "@agilgur5/changelog-maker",
   "version": "2.3.0",
   "description": "A git log to release changelog tool",
+  "files": [
+    "changelog-maker.js",
+    "collect-commit-labels.js",
+    "commit-to-output.js",
+    "group-commits.js",
+    "groups.js",
+    "reverts.js"
+  ],
   "main": "changelog-maker.js",
   "bin": {
     "changelog-maker": "./changelog-maker.js"
