@@ -6,8 +6,17 @@
   "bin": {
     "changelog-maker": "./changelog-maker.js"
   },
+  "preferGlobal": true,
   "author": "Anton Gilgur",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agilgur5/changelog-maker.git"
+  },
+  "scripts": {
+    "lint": "standard",
+    "test": "standard && tape test.js"
+  },
   "dependencies": {
     "async": "~2.6.1",
     "chalk": "~2.4.1",
@@ -21,15 +30,6 @@
     "pkg-to-id": "~0.0.3",
     "split2": "~3.0.0",
     "strip-ansi": "~5.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/agilgur5/changelog-maker.git"
-  },
-  "preferGlobal": true,
-  "scripts": {
-    "lint": "standard",
-    "test": "standard && tape test.js"
   },
   "devDependencies": {
     "standard": "~12.0.1",
