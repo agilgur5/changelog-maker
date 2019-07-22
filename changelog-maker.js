@@ -28,13 +28,6 @@ const ghId = {
   user: argv._[0] || pkgId.user || 'nodejs',
   repo: argv._[1] || (pkgId.name && stripScope(pkgId.name)) || 'node'
 }
-const gitcmd = 'git log --pretty=full --since="{{sincecmd}}" --until="{{untilcmd}}"'
-const commitdatecmd = '$(git show -s --format=%cd `{{refcmd}}`)'
-const untilcmd = ''
-const refcmd = argv.a || argv.all ? 'git rev-list --max-parents=0 HEAD' : 'git rev-list --max-count=1 {{ref}}'
-const defaultRef = '--tags=v*.*.* 2> /dev/null ' +
-        '|| git rev-list --max-count=1 --tags=*.*.* 2> /dev/null ' +
-        '|| git rev-list --max-count=1 HEAD'
 
 debug(ghId)
 
@@ -122,18 +115,6 @@ function onCommitList (list) {
   })}) // eslint-disable-line brace-style, block-spacing
 }
 
-let _startrefcmd = replace(refcmd, { ref: argv['start-ref'] || defaultRef })
-let _endrefcmd = argv['end-ref'] && replace(refcmd, { ref: argv['end-ref'] })
-let _sincecmd = replace(commitdatecmd, { refcmd: _startrefcmd })
-let _untilcmd = argv['end-ref'] ? replace(commitdatecmd, { refcmd: _endrefcmd }) : untilcmd
-let _gitcmd = replace(gitcmd, { sincecmd: _sincecmd, untilcmd: _untilcmd })
-
-debug('%s', _startrefcmd)
-debug('%s', _endrefcmd)
-debug('%s', _sincecmd)
-debug('%s', _untilcmd)
-debug('%s', _gitcmd)
-
 // convert a Stream into a ListStream, then List, then Promisify that List
 function streamToPromList (stream) {
   return new Promise((resolve, reject) => {
@@ -144,12 +125,42 @@ function streamToPromList (stream) {
   })
 }
 
-// print the changelog
-function printChangelog () {
-  return streamToPromList(gitexec.exec(process.cwd(), _gitcmd)
+// get the start ref and end ref
+function getRefs () {
+  const refCmd = 'git rev-list --max-count=1 {{ref}}'
+  const defaultStartRef = '--tags=v*.*.* 2> /dev/null ' +
+        '|| git rev-list --max-count=1 --tags=*.*.* 2> /dev/null ' +
+        '|| git rev-list --max-count=1 HEAD'
+
+  let startRefCmd = replace(refCmd, { ref: argv['start-ref'] || defaultStartRef })
+  let endRefCmd = replace(refCmd, { ref: argv['end-ref'] || 'HEAD' })
+  if (argv.a || argv.all) {
+    startRefCmd = 'git rev-list --max-parents=0 HEAD'
+    endRefCmd = 'git rev-list --max-count=1 HEAD'
+  }
+
+  return Promise.all([
+    streamToPromList(gitexec.exec(process.cwd(), startRefCmd)
+      .pipe(split2()))
+      .then((list) => list.join('\n')),
+    streamToPromList(gitexec.exec(process.cwd(), endRefCmd)
+      .pipe(split2()))
+      .then((list) => list.join('\n'))
+  ])
+}
+
+// print the changelog from start ref to end ref
+function printChangelog (startRef, endRef) {
+  const logCmd = `git log --pretty=full ${startRef}...${endRef}`
+  return streamToPromList(gitexec.exec(process.cwd(), logCmd)
     .pipe(split2())
     .pipe(commitStream(ghId.user, ghId.repo)))
     .then(onCommitList)
 }
 
-printChangelog()
+async function printReleaseChangeLog () {
+  const [startRef, endRef] = await getRefs()
+  await printChangelog(startRef, endRef)
+}
+
+printReleaseChangeLog()
