@@ -133,13 +133,14 @@ function streamToPromList (stream) {
 
 // get the start ref and end ref
 function getRefs () {
+  const prevTagCmd = 'git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1)'
+  const latestTagCmd = 'git describe --abbrev=0 --tags'
   const refCmd = 'git rev-list --max-count=1 {{ref}}'
-  const defaultStartRef = '--tags=v*.*.* 2> /dev/null ' +
-        '|| git rev-list --max-count=1 --tags=*.*.* 2> /dev/null ' +
-        '|| git rev-list --max-count=1 HEAD'
 
-  let startRefCmd = replace(refCmd, { ref: argv['start-ref'] || defaultStartRef })
-  let endRefCmd = replace(refCmd, { ref: argv['end-ref'] || 'HEAD' })
+  const argSRef = argv['start-ref']
+  const argERef = argv['end-ref']
+  let startRefCmd = argSRef ? replace(refCmd, { ref: argSRef }) : prevTagCmd
+  let endRefCmd = argERef ? replace(refCmd, { ref: argERef }) : latestTagCmd
   if (argv.a || argv.all) {
     startRefCmd = 'git rev-list --max-parents=0 HEAD'
     endRefCmd = 'git rev-list --max-count=1 HEAD'
