@@ -115,6 +115,12 @@ function onCommitList (list) {
   })}) // eslint-disable-line brace-style, block-spacing
 }
 
+// simple wrapper around gitexec.exec for normal DRY usage
+function gexec (cmd) {
+  return gitexec.exec(process.cwd(), cmd)
+    .pipe(split2())
+}
+
 // convert a Stream into a ListStream, then List, then Promisify that List
 function streamToPromList (stream) {
   return new Promise((resolve, reject) => {
@@ -140,11 +146,9 @@ function getRefs () {
   }
 
   return Promise.all([
-    streamToPromList(gitexec.exec(process.cwd(), startRefCmd)
-      .pipe(split2()))
+    streamToPromList(gexec(startRefCmd))
       .then((list) => list.join('\n')),
-    streamToPromList(gitexec.exec(process.cwd(), endRefCmd)
-      .pipe(split2()))
+    streamToPromList(gexec(endRefCmd))
       .then((list) => list.join('\n'))
   ])
 }
@@ -152,8 +156,7 @@ function getRefs () {
 // print the changelog from start ref to end ref
 function printChangelog (startRef, endRef) {
   const logCmd = `git log --pretty=full ${startRef}...${endRef}`
-  return streamToPromList(gitexec.exec(process.cwd(), logCmd)
-    .pipe(split2())
+  return streamToPromList(gexec(logCmd)
     .pipe(commitStream(ghId.user, ghId.repo)))
     .then(onCommitList)
 }
