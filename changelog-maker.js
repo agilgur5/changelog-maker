@@ -99,17 +99,12 @@ function printCommits (list) {
   process.stdout.write(out)
 }
 
-function onCommitList (err, list) {
-  if (err) {
-    throw err
-  }
-
+function onCommitList (list) {
   list = organiseCommits(list)
 
-  collectCommitLabels(list, function (err) {
-    if (err) {
-      throw err
-    }
+  // eslint-disable-next-line brace-style
+  return new Promise((resolve, reject) => { collectCommitLabels(list, function (err) {
+    if (err) { reject(err) }
 
     if (argv.group) {
       list = groupCommits(list)
@@ -122,7 +117,9 @@ function onCommitList (err, list) {
     if (!quiet) {
       printCommits(list)
     }
-  })
+
+    resolve()
+  })}) // eslint-disable-line brace-style, block-spacing
 }
 
 let _startrefcmd = replace(refcmd, { ref: argv['start-ref'] || defaultRef })
@@ -137,7 +134,22 @@ debug('%s', _sincecmd)
 debug('%s', _untilcmd)
 debug('%s', _gitcmd)
 
-gitexec.exec(process.cwd(), _gitcmd)
-  .pipe(split2())
-  .pipe(commitStream(ghId.user, ghId.repo))
-  .pipe(list.obj(onCommitList))
+// convert a Stream into a ListStream, then List, then Promisify that List
+function streamToPromList (stream) {
+  return new Promise((resolve, reject) => {
+    stream.pipe(list.obj((err, list) => {
+      if (err) { reject(err) }
+      resolve(list)
+    }))
+  })
+}
+
+// print the changelog
+function printChangelog () {
+  return streamToPromList(gitexec.exec(process.cwd(), _gitcmd)
+    .pipe(split2())
+    .pipe(commitStream(ghId.user, ghId.repo)))
+    .then(onCommitList)
+}
+
+printChangelog()
