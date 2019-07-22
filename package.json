@@ -25,6 +25,18 @@
   "bugs": {
     "url": "https://github.com/agilgur5/changelog-maker/issues"
   },
+  "keywords": [
+    "changelog",
+    "generate",
+    "convention",
+    "commit",
+    "log",
+    "release",
+    "tag",
+    "history",
+    "git",
+    "github"
+  ],
   "scripts": {
     "lint": "standard",
     "test": "standard && tape test.js"
