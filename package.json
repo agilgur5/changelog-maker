@@ -7,7 +7,7 @@
     "changelog-maker": "./changelog-maker.js"
   },
   "author": "Anton Gilgur",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "async": "~2.6.1",
     "chalk": "~2.4.1",
