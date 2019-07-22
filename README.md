@@ -2,8 +2,17 @@
 
 **A git log to release changelog tool**
 
-[![npm](https://nodei.co/npm/@agilgur5/changelog-maker.png?downloads=true&downloadRank=true)](https://nodei.co/npm/@agilgur5/changelog-maker/)
-[![npm](https://nodei.co/npm-dl/@agilgur5/changelog-maker.png?months=6&height=3)](https://nodei.co/npm/@agilgur5/changelog-maker/)
+<!-- releases / versioning -->
+[![package-json](https://img.shields.io/github/package-json/v/agilgur5/changelog-maker.svg)](https://npmjs.org/package/changelog-maker)
+[![releases](https://img.shields.io/github/release/agilgur5/changelog-maker.svg)](https://github.com/agilgur5/changelog-maker/releases)
+[![commits](https://img.shields.io/github/commits-since/agilgur5/changelog-maker/latest.svg)](https://github.com/agilgur5/changelog-maker/commits/master)
+<br><!-- downloads -->
+[![dt](https://img.shields.io/npm/dt/@agilgur5/changelog-maker.svg)](https://npmjs.org/package/@agilgur5/changelog-maker)
+[![dy](https://img.shields.io/npm/dy/@agilgur5/changelog-maker.svg)](https://npmjs.org/package/@agilgur5/changelog-maker)
+[![dm](https://img.shields.io/npm/dm/@agilgur5/changelog-maker.svg)](https://npmjs.org/package/@agilgur5/changelog-maker)
+[![dw](https://img.shields.io/npm/dw/@agilgur5/changelog-maker.svg)](https://npmjs.org/package/@agilgur5/changelog-maker)
+<br>
+[![NPM](https://nodei.co/npm/@agilgur5/changelog-maker.png?downloads=true&downloadRank=true&stars=true)](https://npmjs.org/package/@agilgur5/changelog-maker)
 
 ## Eh?
 
