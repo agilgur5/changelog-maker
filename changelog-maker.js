@@ -154,6 +154,19 @@ function getRefs () {
   ])
 }
 
+// get the ref's commit message
+function printRefMessage (ref) {
+  const messageCmd = `git log --format=%B -n 1 ${ref}`
+  return streamToPromList(gexec(messageCmd))
+    .then((list) => {
+      if (quiet) { return }
+      // print the start ref's commit message in a code block if not simple
+      if (!simple) { console.log('```') }
+      printCommits(list)
+      if (!simple) { console.log('```') }
+    })
+}
+
 // print the changelog from start ref to end ref
 function printChangelog (startRef, endRef) {
   const logCmd = `git log --pretty=full ${startRef}...${endRef}`
@@ -162,9 +175,29 @@ function printChangelog (startRef, endRef) {
     .then(onCommitList)
 }
 
-async function printReleaseChangeLog () {
-  const [startRef, endRef] = await getRefs()
-  await printChangelog(startRef, endRef)
+// print a GitHub comparison between the two refs
+function printComparison (startRef, endRef) {
+  if (quiet) { return }
+  if (!simple) {
+    console.log(`[${startRef}...${endRef}](https://github.com/${ghId.user}/${ghId.repo}/compare/${startRef}...${endRef})`)
+  } else {
+    console.log(`[${startRef}...${endRef}]: https://github.com/${ghId.user}/${ghId.repo}/compare/${startRef}...${endRef}`)
+  }
 }
 
-printReleaseChangeLog()
+async function printReleaseLog () {
+  const [startRef, endRef] = await getRefs()
+  console.log('')
+  console.log(!simple ? '## Release' : 'Release:')
+  console.log('')
+  await printRefMessage(endRef)
+  console.log('')
+  console.log(!simple ? '## Changelog' : 'Changelog:')
+  console.log('')
+  await printChangelog(startRef, endRef)
+  console.log('')
+  await printComparison(startRef, endRef)
+  console.log('')
+}
+
+printReleaseLog()
