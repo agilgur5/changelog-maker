@@ -39,7 +39,8 @@
   ],
   "scripts": {
     "lint": "standard",
-    "test": "standard && tape test.js"
+    "test": "standard && tape test.js",
+    "changelog": "node ./changelog-maker.js"
   },
   "dependencies": {
     "async": "~2.6.1",
